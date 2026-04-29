@@ -1,0 +1,18 @@
+[project]
+name = "flexgp"
+version = "0.1.0"
+description = "Genetic programming framework for lymphnode detection"
+authors = [
+  { name="Francesco De Patre", email="fra.dp01@outlook.com" }
+  ]
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "deap>=1.4.4",
+    "dill>=0.4.1",
+    "matplotlib>=3.10.8",
+    "pydicom>=3.0.2",
+    "scikit-image>=0.25.2",
+    "scikit-learn>=1.7.2",
+    "tqdm>=4.67.3",
+]

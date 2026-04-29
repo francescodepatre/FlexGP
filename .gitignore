@@ -1,0 +1,42 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+.python-version
+# Virtual environments
+.venv
+
+#Old dataset
+f1_properties.txt
+f1_test_data.npy
+f1_test_label.npy
+f1_train_data.npy
+f1_train_label.npy
+
+#models
+best_tree.pkl
+models/model_2026-04-23_17-08-24.pkl
+models/model_2026-04-23_18-53-16.pkl
+models/model_2026-04-23_19-36-32.pkl
+models/model_2026-04-23_19-41-18.pkl
+models/model_2026-04-23_20-22-02.pkl
+models/model_2026-04-24_16-10-15.pkl
+models/model_2026-04-24_16-12-23.pkl
+models/model_2026-04-24_17-04-59.pkl
+models/model_2026-04-26_01-05-01.pkl
+models/model_2026-04-26_13-44-02.pkl
+models/model_2026-04-29_09-30-46.pkl
+models/model_20260427_110004.pkl
+models/model_20260427_110515.pkl
+
+preprocessing_separato/
+preprocessed_dataset/backup
+preprocessed_dataset/bkp
+
+old/
+
+CUSTOM_DATASET_RULES.txt
+training.txt

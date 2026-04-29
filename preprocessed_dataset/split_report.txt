@@ -1,0 +1,18 @@
+============================================================
+NIH CT Lymph Nodes — Split Report
+============================================================
+
+Modalità: SAMPLE  |  hard_neg_ratio=0.4
+
+[TRAIN]
+  Pazienti     : 140
+  Patch totali : 7371
+  Positivi     : 814
+  Negativi     : 6557
+
+[TEST]
+  Pazienti     : 36
+  Patch totali : 1656
+  Positivi     : 169
+  Negativi     : 1487
+

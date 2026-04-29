@@ -9,6 +9,9 @@ wheels/
 # Virtual environments
 .venv
 
+#Temp files 
+.DS_Store
+
 #Old dataset
 f1_properties.txt
 f1_test_data.npy

@@ -9,6 +9,7 @@ from deap import base, creator, tools, gp
 from strongGPDataType import Int1, Int2, Int3, Float1, Float2, Float3, Img, Img1, Vector
 import fgp_functions as fe_fs
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix, classification_report, ConfusionMatrixDisplay
+from sklearn.metrics import roc_auc_score, roc_curve, precision_recall_curve, auc
 
 import dill
 import warnings
@@ -230,6 +231,14 @@ def evaluate_test_set(svm, feat_norm, test_labels):
     #Score SVM per analisi soglia
     scores = svm.decision_function(feat_norm)
 
+    roc_auc = roc_auc_score(test_labels, scores)
+
+    fpr, tpr, thresholds = roc_curve(test_labels, scores)
+
+    precision, recall, thresholds = precision_recall_curve(test_labels, scores)
+
+    pr_auc = auc(recall, precision)
+
     print("VALUTAZIONE SUL TEST SET")
     print(f"Campioni totali: {len(test_labels)}")
     print(f"Positivi (1): {int(np.sum(test_labels == 1))}")
@@ -243,6 +252,8 @@ def evaluate_test_set(svm, feat_norm, test_labels):
     print(f"Negativi: min={scores[test_labels==0].min():.3f} max={scores[test_labels==0].max():.3f} mean={scores[test_labels==0].mean():.3f}")
     print("Confusion Matrix:")
     print(cm)
+    print(f"ROC-AUC: {roc_auc:.4f}")
+    print(f"PR-AUC: {pr_auc:.4f}")
     print("Classification Report:")
     print(classification_report(test_labels, y_pred, target_names=['Negativo (0)', 'Positivo (1)'], zero_division=0))
 
@@ -265,6 +276,24 @@ def evaluate_test_set(svm, feat_norm, test_labels):
     plt.tight_layout()
     plt.show()
 
+    #Plot curva ROC
+    plt.figure()
+    plt.plot(fpr, tpr, label=f'ROC curve (AUC = {roc_auc:.3f})')
+    plt.plot([0, 1], [0, 1], linestyle='--')  # random baseline
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    plt.title('ROC Curve')
+    plt.legend()
+    plt.show()
+
+    #Plot PR_AUC
+    plt.figure()
+    plt.plot(recall, precision, label=f'PR curve (AUC = {pr_auc:.3f})')
+    plt.xlabel('Recall')
+    plt.ylabel('Precision')
+    plt.title('Precision-Recall Curve')
+    plt.legend()
+    plt.show()
     return y_pred, scores
 
 def main():

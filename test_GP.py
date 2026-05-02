@@ -15,23 +15,11 @@ import dill
 import warnings
 warnings.filterwarnings("ignore")
 
-# ═══════════════════════════════════════════════════════════
-#  CONFIGURAZIONE
-# ═══════════════════════════════════════════════════════════
-
 dataSetName = 'sampled_linfonodi'
 directory   = './preprocessed_dataset/'
 MODELS_DIR  = './models/'
 DEMO_FLAG   = False
-MODEL_FILE  = "modello_funzionante.pkl"
-
-# ═══════════════════════════════════════════════════════════
-#  CARICAMENTO DATI
-#  NOTA: i .npy sono già normalizzati in [0,1] dal preprocessing
-#        (window_and_normalize). NON dividere per 255.
-#        Se i tuoi .npy sono ancora uint8, rimuovi il commento
-#        sotto e togli la divisione.
-# ═══════════════════════════════════════════════════════════
+MODEL_FILE  = "model_2026-05-01_00-28-28.pkl"
 
 x_test  = np.load(directory + dataSetName + '_test_data.npy')
 y_test  = np.load(directory + dataSetName + '_test_label.npy')
@@ -51,19 +39,15 @@ if x_data_demo.max() > 1.0:
 print(f"Train range : [{x_train.min():.4f}, {x_train.max():.4f}]")
 print(f"Test  range : [{x_test.min():.4f},  {x_test.max():.4f}]")
 
-# ═══════════════════════════════════════════════════════════
-#  SETUP GP  (necessario prima di caricare il .pkl)
-# ═══════════════════════════════════════════════════════════
-
-population      = 5
-generation      = 5
+population      = 200
+generation      = 30
 cxProb          = 0.8
-mutProb         = 0.19
-elitismProb     = 0.01
-totalRuns       = 1
+mutProb         = 0.15
+elitismProb     = 0.05
+totalRuns       = 10
 initialMinDepth = 2
 initialMaxDepth = 6
-maxDepth        = 8
+maxDepth        = 10
 
 pset = gp.PrimitiveSetTyped('MAIN', [Img], Vector, prefix='Image')
 pset.addPrimitive(fe_fs.root_conVector2, [Img1, Img1], Vector, name='Root2')
@@ -129,8 +113,7 @@ creator.create("FitnessMax", base.Fitness, weights=(1.0,))
 creator.create("Individual", gp.PrimitiveTree, fitness=creator.FitnessMax)
 
 toolbox = base.Toolbox()
-toolbox.register("expr",       gp_restrict.genHalfAndHalfMD,
-                 pset=pset, min_=initialMinDepth, max_=initialMaxDepth)
+toolbox.register("expr",       gp_restrict.genHalfAndHalfMD, pset=pset, min_=initialMinDepth, max_=initialMaxDepth)
 toolbox.register("individual", tools.initIterate, creator.Individual, toolbox.expr)
 toolbox.register("population", tools.initRepeat, list, toolbox.individual)
 toolbox.register("compile",    gp.compile, pset=pset)
@@ -140,7 +123,6 @@ toolbox.register("selectElitism", tools.selBest)
 toolbox.register("mate",          gp.cxOnePoint)
 toolbox.register("expr_mut",      gp_restrict.genFull, min_=0, max_=2)
 toolbox.register("mutate",        gp.mutUniform, expr=toolbox.expr_mut, pset=pset)
-
 
 def normalize_features(feat_raw, feat_p1, feat_p99, scaler):
     if feat_p1 is not None and feat_p99 is not None:
@@ -211,8 +193,7 @@ def plot_with_boxes(image, saliency, pred_label, true_label, color='cyan'):
     for (r0, c0, h, w) in get_bounding_boxes(saliency):
         ax.add_patch(Rectangle(
             (c0, r0), w, h,
-            linewidth=2, edgecolor=color, facecolor='none'
-        ))
+            linewidth=2, edgecolor=color, facecolor='none'))
     label_color = 'lime' if pred_label == true_label else 'red'
     ax.set_title(f"Bounding boxes predetti\nLabel reale: {int(true_label)} Predizione: {int(pred_label)}", color=label_color, fontsize=10)
     ax.axis('off')

@@ -21,15 +21,15 @@ dataSetName  = 'sampled_linfonodi'
 directory    = './preprocessed_dataset/'
 models_dir   = './models/'
 
-population      = 200
-generation      = 30
+population      = 200 #80
+generation      = 30 #10
 cxProb          = 0.8
 mutProb         = 0.15
 elitismProb     = 0.05
-totalRuns       = 10
+totalRuns       = 10 #5
 initialMinDepth = 2
-initialMaxDepth = 6
-maxDepth        = 10
+initialMaxDepth = 6 #5
+maxDepth        = 10 #8
 
 #Percentili per clip robusto delle feature 
 #Valori < P_LOW o > P_HIGH vengono clippati prima del MinMaxScaler.

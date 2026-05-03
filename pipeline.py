@@ -23,8 +23,8 @@ NMS_IOU_THRESHOLD= 0.3  # IoU sopra cui una box viene soppressa
 OUTPUT_DIR= './results/'
 INITIAL_MIN_DEPTH= 2
 INITIAL_MAX_DEPTH= 6
-IMAGE_PATH = './immagini/pos_clean_02.png'
-MODEL_NAME = 'modello_funzionante.pkl'
+IMAGE_PATH = './immagini/neg_clean_02.png'
+MODEL_NAME = 'modello_toy.pkl'
 
 pset = gp.PrimitiveSetTyped('MAIN', [Img], Vector, prefix='Image')
 pset.addPrimitive(fe_fs.root_conVector2, [Img1, Img1], Vector, name='Root2')

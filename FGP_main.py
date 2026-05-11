@@ -28,29 +28,17 @@ y_test = numpy.load(dataSetName + '_test_label.npy')
 print(x_train.shape, y_train.shape, x_test.shape, y_test.shape)
 # parameters:
 
-'''
-population = 5
-generation = 5
-cxProb = 0.8
-mutProb = 0.19
-elitismProb = 0.01
-totalRuns = 1
-initialMinDepth = 2
-initialMaxDepth = 6
-maxDepth = 8
-'''
 #PARAMETRI DA PAG 289 DEL LIBRO
 #DOVREBBERO ESSERE QUELLI COMUNI PER LA GP 
 population = 500
 generation = 50
-cxProb = 0.
+cxProb = 0.8
 mutProb = 0.19
 elitismProb = 0.01
 totalRuns = 10
 initialMinDepth = 2
 initialMaxDepth = 6
 maxDepth = 8
-
 
 ##GP
 pset = gp.PrimitiveSetTyped('MAIN', [Img], Vector, prefix='Image')
@@ -196,7 +184,7 @@ def evalTest(toolbox, individual, trainData, trainLabel, test, testL):
     return numpy.asarray(train_tf), numpy.asarray(test_tf), trainLabel, testL, accuracy
 
 
-if __name__ == "__main__":
+def main_training():
     beginTime = time.process_time()
     pop, log, hof = GPMain(randomSeeds)
     endTime = time.process_time()
@@ -218,3 +206,5 @@ if __name__ == "__main__":
             "toolbox": toolbox,
         }, f)
 
+if __name__ == "__main__":
+    main_training()

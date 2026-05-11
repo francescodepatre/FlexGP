@@ -18,8 +18,8 @@ warnings.filterwarnings("ignore")
 dataSetName = 'sampled_linfonodi'
 directory   = './preprocessed_dataset/'
 MODELS_DIR  = './models/'
-DEMO_FLAG   = False
-MODEL_FILE  = "model_2026-05-01_00-28-28.pkl"
+DEMO_FLAG   = True
+MODEL_FILE  = "modello_full.pkl"
 
 x_test  = np.load(directory + dataSetName + '_test_data.npy')
 y_test  = np.load(directory + dataSetName + '_test_label.npy')
@@ -312,7 +312,7 @@ def main():
     y_pred_all, svm_scores = evaluate_test_set(loaded_svm, test_norm, y_test)
 
     if DEMO_FLAG:
-        idx = 7 #cambiare indice per analizzare campioni diversi
+        idx = 4 #cambiare indice per analizzare campioni diversi
 
         image      = x_data_demo[idx]
         true_label = y_data_demo[idx]

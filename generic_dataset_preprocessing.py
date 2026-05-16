@@ -11,35 +11,39 @@ import matplotlib.pyplot as plt
 from tqdm import tqdm
 import matplotlib.patches as mpatches
 from PIL import Image
+import tomli
 
 warnings.filterwarnings("ignore")
 
-PATCH_H = 50
-PATCH_W = 50
-STRIDE = PATCH_H // 2  #stride per hard negatives e grid mode
-SEED = 42
-DATASET_ROOT_DIR   = './custom_dataset'
-DATASET_OUTPUT_DIR = './preprocessed_dataset'
-NEG_RATIO = 5.0   # negativi totali per ogni positivo
-HARD_NEG_RATIO = 0.4   #frazione dei negativi estratti con sliding window
-TRAIN_RATIO    = 0.8
+with open("params.toml", "rb") as f:
+    cfg = tomli.load(f)
 
-CLAHE_FLAG         = True
-SHOW_FLAG          = False
-FIXED_N_FLAG       = False
-N_PATCH_FIXED      = 50
+PATCH_H = cfg['generic_dataset']['PATCH_H']
+PATCH_W = cfg['generic_dataset']['PATCH_W']
+STRIDE = cfg['generic_dataset']['STRIDE']
+SEED = cfg['generic_dataset']['SEED']
+DATASET_ROOT_DIR   = cfg['generic_dataset']['DATASET_ROOT_DIR']
+DATASET_OUTPUT_DIR = cfg['generic_dataset']['DATASET_OUTPUT_DIR']
+NEG_RATIO = cfg['generic_dataset']['NEG_RATIO']   # negativi totali per ogni positivo
+HARD_NEG_RATIO = cfg['generic_dataset']['HARD_NEG_RATIO']   #frazione dei negativi estratti con sliding window
+TRAIN_RATIO    = cfg['generic_dataset']['TRAIN_RATIO']
 
-DEFAULT_HALF_BOX_PX = 25
+CLAHE_FLAG         = cfg['generic_dataset']['CLAHE_FLAG']
+SHOW_FLAG          = cfg['generic_dataset']['SHOW_FLAG']
+FIXED_N_FLAG       = cfg['generic_dataset']['FIXED_N_FLAG']
+N_PATCH_FIXED      = cfg['generic_dataset']['N_PATCH_FIXED']
+
+DEFAULT_HALF_BOX_PX = cfg['generic_dataset']['DEFAULT_HALF_BOX_PX']
 
 # True = SAMPLE mode, False = GRID mode
-SAMPLE_FLAG = True
+SAMPLE_FLAG = cfg['generic_dataset']['SAMPLE_FLAG']
 
 #Flag demo
 #Se TRUE elabora solo il primo soggetto (DEMO_SUBJECT_ID), salva patch positive e immagini con bounding box GT; NON esegue il preprocessing completo.
 #Se FALSE esegue il preprocessing completo su tutti i soggetti.
-DEMO_FLAG        = False
-DEMO_SUBJECT_ID  = ""     # lasciare vuoto per usare il primo soggetto trovato
-DEMO_N_PATCHES   = 10     # patch positive da estrarre in demo
+DEMO_FLAG        = cfg['generic_dataset']['DEMO_FLAG']
+DEMO_SUBJECT_ID  = cfg['generic_dataset']['DEMO_SUBJECT_ID']
+DEMO_N_PATCHES   = cfg['generic_dataset']['DEMO_N_PATCHES'] 
 
 
 def debug_show_patches(patches, labels, n=10):

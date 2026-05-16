@@ -10,16 +10,19 @@ from strongGPDataType import Int1, Int2, Int3, Float1, Float2, Float3, Img, Img1
 import fgp_functions as fe_fs
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix, classification_report, ConfusionMatrixDisplay
 from sklearn.metrics import roc_auc_score, roc_curve, precision_recall_curve, auc
-
-import dill
 import warnings
+import tomli
+
 warnings.filterwarnings("ignore")
 
-dataSetName = 'sampled_linfonodi'
-directory   = './preprocessed_dataset/'
-MODELS_DIR  = './models/'
-DEMO_FLAG   = True
-MODEL_FILE  = "modello_full.pkl"
+with open("params.toml", "rb") as f:
+    cfg = tomli.load(f)
+
+dataSetName = cfg['data_utils']['dataSetName']
+directory   = cfg['data_utils']['directory']
+MODELS_DIR  = cfg['data_utils']['models_dir']
+DEMO_FLAG   = cfg['data_utils']['DEMO_FLAG']
+MODEL_FILE  = cfg['data_utils']['MODEL_NAME']
 
 x_test  = np.load(directory + dataSetName + '_test_data.npy')
 y_test  = np.load(directory + dataSetName + '_test_label.npy')

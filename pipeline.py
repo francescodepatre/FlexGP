@@ -10,21 +10,25 @@ from deap import base, creator, tools, gp
 from strongGPDataType import Int1, Int2, Int3, Float1, Float2, Float3, Img, Img1, Vector
 import fgp_functions as fe_fs
 import warnings
+import tomli
 
 warnings.filterwarnings("ignore")
 
-MODELS_DIR= './models/'
-PATCH_WIDTH= 50
-PATCH_HEIGHT= 50
-STRIDE= 25 # 50% overlap
-SVM_THRESHOLD= 1.5 # soglia su decision_function (alzare per meno FP)
-MIN_CLUSTER_PATCHES= 2    # finestre positive minime per tenere un cluster
-NMS_IOU_THRESHOLD= 0.3  # IoU sopra cui una box viene soppressa
-OUTPUT_DIR= './results/'
-INITIAL_MIN_DEPTH= 2
-INITIAL_MAX_DEPTH= 6
-IMAGE_PATH = './immagini/neg_clean_02.png'
-MODEL_NAME = 'modello_toy.pkl'
+with open("params.toml", "rb") as f:
+    cfg = tomli.load(f)
+
+MODELS_DIR= cfg['data_utils']['MODELS_DIR']
+PATCH_WIDTH= cfg['preprocessing']['PATCH_W']
+PATCH_HEIGHT= cfg['preprocessing']['PATCH_H']
+STRIDE= cfg['preprocessing']['STRIDE']
+SVM_THRESHOLD= cfg['data_utils']['SVM_THRESHOLD']
+MIN_CLUSTER_PATCHES= cfg['data_utils']['MIN_CLUSTER_PATCHES']
+NMS_IOU_THRESHOLD= cfg['data_utils']['NMS_IOU_THRESHOLD']
+OUTPUT_DIR= cfg['data_utils']['OUTPUT_DIR']
+INITIAL_MIN_DEPTH= cfg['model_config']['initialMinDepth']
+INITIAL_MAX_DEPTH= cfg['model_config']['initialMaxDepth']
+IMAGE_PATH = cfg['data_utils']['IMAGE_PATH']
+MODEL_NAME = cfg['data_utils']['MODEL_NAME']
 
 pset = gp.PrimitiveSetTyped('MAIN', [Img], Vector, prefix='Image')
 pset.addPrimitive(fe_fs.root_conVector2, [Img1, Img1], Vector, name='Root2')

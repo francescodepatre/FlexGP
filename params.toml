@@ -1,0 +1,63 @@
+#Projects parameters
+
+[model_config]
+randomSeeds = 12
+population = 200
+generation = 30 
+cxProb = 0.8
+mutProb = 0.15
+elitismProb = 0.05
+totalRuns = 10
+initialMinDepth = 2
+initialMaxDepth = 6
+maxDepth = 10 
+
+#[model_config] #toy version
+#randomSeeds = 12
+#population = 80
+#generation = 10
+#cxProb = 0.8
+#mutProb = 0.15
+#elitismProb = 0.05
+#totalRuns = 5
+#initialMinDepth = 2
+#initialMaxDepth = 5
+#maxDepth = 8
+
+[preprocessing]
+PATCH_H = 50 #dimensione patch in pixel (altezza)
+PATCH_W = 50 #dimensione patch in pixel (larghezza)
+STRIDE = 25 #stride per hard negatives e grid mode
+HU_MIN = -200.0 #valore HU minimo per normalizzazione (es. -200 per rimuovere aria, -1000 per rimuovere tutto sotto lo zero)
+HU_MAX = 300.0 #valore HU massimo per normalizzazione (es. 300 per rimuovere tutto sopra il valore) NECESSARIO PER IDENTIFICARE I TESSUTI MOLLI
+SEED = 42 
+DATASET_ROOT_DIR = '../TCIA_CT_Lymph_Nodes_03-31-2023' #Cartella radice del dataset 
+DATASET_OUTPUT_DIR = './preprocessed_dataset' #Cartella di output per i file .npy (output del preprocessing)
+NEG_RATIO = 5.0 #negativi totali per ogni positivo
+HARD_NEG_RATIO = 0.4  #frazione dei negativi estratti con sliding window
+TRAIN_RATIO = 0.8 #frazione di pazienti usati per il training (il resto viene usato per test)
+CLAHE_FLAG = true #Applicazione di CLAHE alle patch (migliora contrasto e uniformità dell'immagine, utile per identificare meglio i tessuti molli)
+SHOW_FLAG = false #Se true, mostra le patch estratte durante il preprocessing (utile per debug e per capire se i parametri di estrazione sono adeguati, sconsigliato con grid mode o con un numero elevato di patch)
+FIXED_N_FLAG = false #Se true, estrae un numero fisso di patch per ogni paziente (N_PATCH_FIXED) altrimenti se false suddivide l'immagine in una griglia di patch (con sovrapposizione definita da STRIDE)
+N_PATCH_FIXED = 50 #Numero di patch da estrarre per ogni paziente se FIXED_N_FLAG è true, altrimenti se FIXED_N_FLAG è false questo parametro viene ignorato e le patch vengono estratte con una griglia (con sovrapposizione definita da STRIDE)
+SAMPLE_FLAG = true #Se true, estrae un numero fisso di patch altrimenti se false suddivide l'immagine in una griglia di patch (con sovrapposizione definita da STRIDE)
+DEMO_FLAG = true #Se true elabora un solo paziente (DEMO_PATIENT_ID), salva patch positive e immagini con bounding box GT se false esegue il preprocessing completo su tutti i pazienti (SCONSIGLIATO usarlo con grid mode)
+DEMO_PATIENT_ID = "ABD_LYMPH_005" #ID del paziente da usare in demo
+DEMO_N_PATCHES = 10 #numero di patch positive da estrarre in demo 
+DEFAULT_HALF_BOX_PX = 25
+DEMO_SUBJECT_ID = ""#Lasciare vuoto per usare il primo soggetto trovato (FLAG USATO SOLO NEL PREPROCESSING GENERICO)
+
+
+[data_utils]
+dataSetName = 'sampled_linfonodi' #Nome dataset
+directory = './preprocessed_dataset/'#cartella di output preprocedding
+models_dir = './models/' #Cartella dei modelli
+DEMO_FLAG = true #Se true, esegue la pipeline su un solo paziente (DEMO_PATIENT_ID) e salva i risultati in OUTPUT_DIR con nome MODEL_NAME_demo.png, se false esegue la pipeline completa su tutti i pazienti (SCONSIGLIATO usarlo con grid mode)
+SVM_THRESHOLD = 1.5 #Soglia su decision_function (alzare per meno FP)
+MIN_CLUSTER_PATCHES = 2 #Finestre positive minime per tenere un cluster
+NMS_IOU_THRESHOLD = 0.3 #IoU sopra cui una box viene soppressa
+OUTPUT_DIR = './results/' #Cartella di output per i risultati
+IMAGE_PATH = './immagini/neg_clean_02.png' #Path dell'immagine da usare in demo (se DEMO_FLAG è true, altrimenti viene ignorato e la pipeline viene eseguita su tutti i pazienti)
+MODEL_NAME = 'modello_toy.pkl'#Path dell'individuo da utilizzare
+P_LOW = 1 #Percentile low
+P_HIGH = 99 #Percentile high

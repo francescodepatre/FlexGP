@@ -12,43 +12,32 @@ import numpy as np
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 import matplotlib.patches as mpatches
+import tomli
 
 warnings.filterwarnings("ignore")
 
-PATCH_H = 50
-PATCH_W = 50
-#stride per hard negatives e grid mode
-STRIDE  = PATCH_H // 2 
+with open("params.toml", "rb") as f:
+    cfg = tomli.load(f)
 
-HU_MIN = -200.0
-HU_MAX =  300.0
-SEED   = 42
-
-DATASET_ROOT_DIR   = '../TCIA_CT_Lymph_Nodes_03-31-2023'
-DATASET_OUTPUT_DIR = './preprocessed_dataset'
-
-# negativi totali per ogni positivo
-NEG_RATIO      = 5.0   
-# frazione dei negativi estratti con sliding window
-HARD_NEG_RATIO = 0.4   
-TRAIN_RATIO    = 0.8
-
-CLAHE_FLAG    = True
-SHOW_FLAG     = False
-FIXED_N_FLAG  = False
-N_PATCH_FIXED = 50
-
-# True = SAMPLE mode, False = GRID mode
-SAMPLE_FLAG = True   
-
-#Flag demo
-#Se true elabora un solo paziente (DEMO_PATIENT_ID), salva patch positive e immagini con bounding box GT
-#NON ESEGUE IL PREPROCESSING COMPLETO
-#Se false esegue il preprocessing completo su tutti i pazienti
-DEMO_FLAG       = True
-DEMO_PATIENT_ID = "ABD_LYMPH_005"  
-#numero di patch positive da estrarre in demo 
-DEMO_N_PATCHES  = 10               
+PATCH_H = cfg['preprocessing']['PATCH_H']
+PATCH_W = cfg['preprocessing']['PATCH_W']
+STRIDE = cfg['preprocessing']['STRIDE']
+HU_MIN = cfg['preprocessing']['HU_MIN']
+HU_MAX = cfg['preprocessing']['HU_MAX']
+SEED = cfg['preprocessing']['SEED']
+DATASET_ROOT_DIR = cfg['preprocessing']['DATASET_ROOT_DIR']
+DATASET_OUTPUT_DIR = cfg['preprocessing']['DATASET_OUTPUT_DIR']
+NEG_RATIO = cfg['preprocessing']['NEG_RATIO']
+HARD_NEG_RATIO = cfg['preprocessing']['HARD_NEG_RATIO']
+TRAIN_RATIO = cfg['preprocessing']['TRAIN_RATIO']
+CLAHE_FLAG = cfg['preprocessing']['CLAHE_FLAG']
+SHOW_FLAG = cfg['preprocessing']['SHOW_FLAG']
+FIXED_N_FLAG = cfg['preprocessing']['FIXED_N_FLAG']
+N_PATCH_FIXED = cfg['preprocessing']['N_PATCH_FIXED']
+SAMPLE_FLAG = cfg['preprocessing']['SAMPLE_FLAG']
+DEMO_FLAG = cfg['preprocessing']['DEMO_FLAG']
+DEMO_PATIENT_ID = cfg['preprocessing']['DEMO_PATIENT_ID']
+DEMO_N_PATCHES = cfg['preprocessing']['DEMO_N_PATCHES']
 
 def debug_show_patches(patches, labels, n=10):
     for i in range(min(n, len(patches))):

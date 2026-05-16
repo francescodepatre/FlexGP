@@ -13,33 +13,29 @@ from sklearn.svm import LinearSVC
 from sklearn.model_selection import cross_val_score
 from sklearn import preprocessing
 import dill as pkl
+import tomli
 
 warnings.filterwarnings("ignore")
 
-randomSeeds  = 12
-dataSetName  = 'sampled_linfonodi'
-directory    = './preprocessed_dataset/'
-models_dir   = './models/'
+with open("params.toml", "rb") as f:
+    cfg = tomli.load(f)
 
-population      = 200 #80
-generation      = 30 #10
-cxProb          = 0.8
-mutProb         = 0.15
-elitismProb     = 0.05
-totalRuns       = 10 #5
-initialMinDepth = 2
-initialMaxDepth = 6 #5
-maxDepth        = 10 #8
+randomSeeds = cfg['model_config']['randomSeeds']
+dataSetName = cfg['data_utils']['dataSetName']
+directory = cfg['data_utils']['directory']
+models_dir = cfg['data_utils']['models_dir']
+population = cfg['model_config']['population']
+generation = cfg['model_config']['generation']
+cxProb = cfg['model_config']['cxProb']
+mutProb = cfg['model_config']['mutProb']
+elitismProb = cfg['model_config']['elitismProb']
+totalRuns = cfg['model_config']['totalRuns']
+initialMinDepth = cfg['model_config']['initialMinDepth']
+initialMaxDepth = cfg['model_config']['initialMaxDepth']
+maxDepth = cfg['model_config']['maxDepth']
+P_LOW = cfg['data_utils']['P_LOW']
+P_HIGH = cfg['data_utils']['P_HIGH']
 
-#Percentili per clip robusto delle feature 
-#Valori < P_LOW o > P_HIGH vengono clippati prima del MinMaxScaler.
-#Questo rende lo scaler robusto a patch con feature fuori range.
-P_LOW  = 1    # percentile inferiore
-P_HIGH = 99   # percentile superiore
-
-#CARICAMENTO DATI
-#NOTA: i .npy sono già in [0,1] dopo window_and_normalize nel preprocessing.
-#non dividere ulteriormente per 255
 x_train = numpy.load(directory + dataSetName + '_train_data.npy')
 y_train = numpy.load(directory + dataSetName + '_train_label.npy')
 x_test  = numpy.load(directory + dataSetName + '_test_data.npy')
@@ -244,7 +240,7 @@ def main():
             "feat_p1":   p1,
             "feat_p99":  p99,   
         }, f)
-    print(f"Modello salvato in: {model_path}")
+    print(f"Model saved in: {model_path}")
 
 if __name__ == "__main__":
     main()
